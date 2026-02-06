@@ -2,8 +2,7 @@
 import { GoogleGenAI, Type, FunctionDeclaration } from "@google/genai";
 import { SYSTEM_PROMPT } from "../constants";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
-
+// The tool definitions remain as constants
 const checkAvailabilityTool: FunctionDeclaration = {
   name: 'check_availability',
   parameters: {
@@ -35,6 +34,10 @@ const createReservationTool: FunctionDeclaration = {
 };
 
 export const createChatSession = () => {
+  // Fix: Initialize GoogleGenAI exclusively with process.env.API_KEY as a named parameter
+  // Do not use fallbacks or define process.env elsewhere.
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  
   return ai.chats.create({
     model: 'gemini-3-flash-preview',
     config: {
